@@ -1,0 +1,2354 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PULSA NASIONAL</title>
+    <style>
+        * {
+            color: black;
+            text-transform: capitalize;
+            font-family: 'Helvetica', sans-serif;
+        }
+
+        #providerLogo {
+            /* position: absolute; */
+            width: 42px;
+            /* Atur ukuran logo */
+            /* height: auto; */
+            /* left: 5px; */
+            /* right: 25vw; */
+            display: none;
+            top: 0;
+            /* margin-right: 0; */
+            /* margin-left: 2px; */
+            align-items: center;
+            /* Sembunyikan awalnya */
+            margin-bottom: -20px;
+            /* border: 1px solid red; */
+            margin-top: 0;
+        }
+
+        #amountDetail {
+            font-size: large;
+            color: #004085;
+            font-weight: bold;
+        }
+
+        #nominal {
+            text-transform: uppercase;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgb(223, 216, 216);
+            margin: 0;
+            padding: 0 5px;
+            display: flex;
+            flex-direction: column;
+            justify-content: start;
+            align-items: center;
+            min-height: 95vh;
+            /* width: 90vw; */
+            /* border: 1px solid rgb(119, 0, 255); */
+        }
+
+        .container {
+            background-color: rgb(223, 216, 216);
+            padding: 20px;
+            border-radius: 8px;
+            /* box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); */
+            /* width: 300px; */
+            width: 88vw;
+            text-align: center;
+            /* border: 1px solid rgb(255, 230, 0); */
+        }
+
+        .container-input {
+            z-index: 2;
+            display: flex;
+            position: fixed;
+            align-items: center;
+            /* justify-content: center; */
+            width: 100vw;
+            height: 95px;
+            top: 0;
+            left: 0;
+            padding: 0 5vw;
+            background-color: rgb(223, 216, 216);
+            gap: 2%;
+            /* box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); */
+        }
+
+
+        input[type="tel"] {
+            z-index: 2;
+            width: 75%;
+            height: 27px;
+            /* padding: 10px; */
+            margin-bottom: -20px;
+            border: 2px solid #ccc;
+            border-radius: 6px;
+            top: 27px;
+            left: 5px;
+            right: 5px;
+            padding: 12px 15px;
+            font-size: 16px;
+            background-color: #fff;
+            outline: none;
+            transition: border-color 0.3s;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .target-number,
+        .nominal-terpilih {
+            margin: 5px;
+            font-family: 'Helvetica', sans-serif;
+            font-size: 900;
+        }
+
+
+        .provider-section {
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .nominal-buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 40px;
+        }
+
+        .nominal-buttons button {
+            background-color: #f3efef;
+            color: white;
+            border: none;
+            padding: 5px;
+            /* Padding lebih kecil untuk mengurangi tinggi tombol */
+            margin: 3px 0;
+            /* Mengurangi margin */
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 98%;
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+            justify-content: space-between;
+        }
+
+        .nominal-buttons button:hover {
+            background-color: #004085;
+
+            .bottom,
+            .top {
+                color: #ebebeb;
+            }
+        }
+
+        .button-text {
+            display: flex;
+            flex-direction: column;
+            padding: 5px;
+        }
+
+        .button-text .top {
+            letter-spacing: 1px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 10px;
+            /* Mengurangi margin atas */
+            margin-bottom: 5px;
+            /* Mengurangi margin bawah */
+            /* margin-right: 50%;
+            padding-right: 10%; */
+            /* border: 1px solid purple; */
+        }
+
+
+        .button-text .bottom {
+            font-size: 12px;
+            color: #5f5b5b;
+            /* padding-right: 30px; */
+            /* border: 1px solid purple; */
+        }
+
+        button.submit {
+            background-color: #28a745;
+            margin-top: 15px;
+        }
+
+        button.submit:hover {
+            background-color: #218838;
+        }
+
+        /*  */
+        .btn {
+            background-color: #3b82f6;
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #2563eb;
+        }
+
+        .slide-up {
+            position: fixed;
+            bottom: -40vh;
+            /* Ubah ke 30% dari tinggi layar */
+            left: 0;
+            right: 0;
+            background-color: rgb(235, 235, 235);
+            box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            padding: 20px;
+            height: 35vh;
+            /* Mengubah tinggi menjadi 30% */
+            transition: bottom 0.2s ease-out;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide-up.show {
+            bottom: 0;
+        }
+
+        .detail-header {
+            display: flex;
+            justify-content: space-between;
+            /* Menyebarkan konten ke kiri dan kanan */
+            align-items: center;
+            margin-bottom: 10px;
+            /* Menambahkan jarak antara header dan konten berikutnya */
+        }
+
+        .buy-btn {
+            background-color: #22c55e;
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: auto;
+            width: 100%;
+        }
+
+        .buy-btn:hover {
+            background-color: #16a34a;
+        }
+
+        .close-btn {
+            background-color: #ef4444;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .close-btn:hover {
+            background-color: #dc2626;
+        }
+
+        .button-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            position: relative;
+        }
+
+        /* .bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .status {
+            margin-left: auto;
+            text-align: right;
+            align-self: center;
+        } */
+
+        .button-texts {
+            position: relative;
+            padding-right: 84%;
+            /* justify-content: space-between; */
+            /* Sisipkan ruang di sebelah kanan untuk status */
+        }
+
+        .status {
+            width: 100%;
+            height: 10px;
+            font-weight: 500;
+            font-size: small;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        var mataUang = "Rp."
+        var hargaPulsa = {
+            telkomsel: {
+                2000: 3045,
+                3000: 3820,
+                4000: 4896,
+                5000: 5293,
+                6000: 6970,
+                10000: 10230,
+                15000: 14925,
+                20000: 19885,
+                25000: 24765,
+                30000: 29675,
+                35000: 34855,
+                40000: 39269,
+                45000: 44720,
+                50000: 49500,
+                55000: 54625,
+                60000: 59575,
+                65000: 64550,
+                70000: 69500,
+                75000: 73204,
+                80000: 79400,
+                85000: 84350,
+                90000: 89300,
+                95000: 94250,
+                100000: 98400,
+                150000: 148710,
+                200000: 196650
+            },
+            indosat: {
+                5000: 6705,
+                10000: 11620,
+                12000: 13025,
+                15000: 15875,
+                20000: 20680,
+                25000: 25525,
+                30000: 30600,
+                40000: 39990,
+                50000: 49870,
+                60000: 59725,
+                70000: 69875,
+                80000: 79925,
+                90000: 89550,
+                100000: 97740,
+                150000: 147060,
+                200000: 196310,
+                500000: 500515
+            },
+            xl: {
+
+                5000: 5881,
+                10000: 10865,
+                15000: 15000,
+                25000: 24965,
+                30000: 29955,
+                40000: 39960,
+                50000: 49875,
+                60000: 59990,
+                70000: 69955,
+                80000: 79945,
+                90000: 89910,
+                100000: 98900,
+                150000: 149825,
+                200000: 199700
+
+            },
+
+            axis: {
+                5000: 5883,
+                10000: 10865,
+                15000: 15000,
+                25000: 24965,
+                30000: 29955,
+                40000: 39960,
+                50000: 49875,
+                60000: 59990,
+                70000: 69955,
+                80000: 79945,
+                90000: 89910,
+                100000: 99710,
+                150000: 149825,
+                200000: 199700
+            },
+            three: {
+                5000: 6544,
+                10000: 11411,
+                15000: 15899,
+                20000: 20765,
+                25000: 25625,
+                30000: 30735,
+                40000: 39527,
+                50000: 49180,
+                60000: 59997,
+                70000: 68757,
+                75000: 73624,
+                80000: 79117,
+                90000: 88452,
+                100000: 97836,
+                125000: 122924,
+                150000: 146787,
+                200000: 195086
+            },
+            smartfren: {
+                5000: 4925,
+                10000: 9757,
+                12000: 11703,
+                15000: 14603,
+                20000: 19517,
+                25000: 24290,
+                30000: 29105,
+                35000: 34470,
+                40000: 38969,
+                45000: 44125,
+                50000: 48175,
+                55000: 53545,
+                60000: 58175,
+                65000: 63392,
+                70000: 68305,
+                75000: 72550,
+                80000: 77965,
+                85000: 82790,
+                90000: 87645,
+                95000: 92517,
+                100000: 95660,
+                125000: 122073,
+                150000: 145775,
+                200000: 194650,
+                300000: 296800,
+                500000: 494150
+            }
+
+        };
+
+        // Nominal Pulsa Start
+        var nominalPulsa = {
+            telkomsel: {
+                ptsel1: 1000,
+                ptsel2: 2000,
+                ptsel3: 3000,
+                ptsel4: 4000,
+                ptsel5: 5000,
+                ptsel6: 6000,
+                ptsel7: 7000,
+                ptsel8: 8000,
+                ptsel9: 9000,
+                ptsel10: 10000,
+                ptsel11: 11000,
+                ptsel12: 12000,
+                ptsel13: 13000,
+                ptsel14: 14000,
+                ptsel15: 15000,
+                ptsel16: 16000,
+                ptsel17: 17000,
+                ptsel18: 18000,
+                ptsel19: 19000,
+                ptsel20: 20000,
+                ptsel25: 25000,
+                ptsel30: 30000,
+                ptsel35: 35000,
+                ptsel40: 40000,
+                ptsel45: 45000,
+                ptsel50: 50000,
+                ptsel55: 55000,
+                ptsel60: 60000,
+                ptsel65: 65000,
+                ptsel70: 70000,
+                ptsel75: 75000,
+                ptsel80: 80000,
+                ptsel85: 85000,
+                ptsel90: 90000,
+                ptsel95: 95000,
+                ptsel100: 100000,
+                ptsel150: 150000,
+                ptsel200: 200000
+            },
+
+            indosat: {
+                pisat5: 5000,
+                pisatPromo5: 5000,
+                pisat10: 10000,
+                pisatPromo10: 10000,
+                pisat12: 12000,
+                pisat15: 15000,
+                pisat20: 20000,
+                pisat25: 25000,
+                pisat30: 30000,
+                pisat40: 40000,
+                pisat50: 50000,
+                pisat60: 60000,
+                pisat70: 70000,
+                pisat80: 80000,
+                pisat90: 90000,
+                pisat100: 100000,
+                pisat150: 150000,
+                pisat200: 200000,
+                pisat500: 500000
+            },
+
+            three: {
+                pthree5: 5000,
+                pthreePromo5: 5000,
+                pthree10: 10000,
+                pthree15: 15000,
+                pthree20: 20000,
+                pthree25: 25000,
+                pthree30: 30000,
+                pthree40: 40000,
+                pthree50: 50000,
+                pthree60: 60000,
+                pthree70: 70000,
+                pthree75: 75000,
+                pthree80: 80000,
+                pthree90: 90000,
+                pthree100: 100000,
+                pthree125: 125000,
+                pthree150: 150000,
+                pthree200: 200000
+            },
+
+            xl: {
+                pxl5: 5000,
+                pxl10: 10000,
+                pxl15: 15000,
+                pxl25: 25000,
+                pxl30: 30000,
+                pxl40: 40000,
+                pxl50: 50000,
+                pxl60: 60000,
+                pxl70: 70000,
+                pxl80: 80000,
+                pxl90: 90000,
+                pxl100: 100000,
+                pxl150: 150000,
+                pxl200: 200000
+            },
+
+            axis: {
+                paxis5: 5000,
+                paxis10: 10000,
+                paxis15: 15000,
+                paxis25: 25000,
+                paxis30: 30000,
+                paxis40: 40000,
+                paxis50: 50000,
+                paxis60: 60000,
+                paxis70: 70000,
+                paxis80: 80000,
+                paxis90: 90000,
+                paxis100: 100000,
+                paxis150: 150000,
+                paxis200: 200000
+            },
+
+            smartfren: {
+                psf5: 5000,
+                psf10: 10000,
+                psf12: 12000,
+                psf15: 15000,
+                psf20: 20000,
+                psf25: 25000,
+                psf30: 30000,
+                psf35: 35000,
+                psf40: 40000,
+                psf45: 45000,
+                psf50: 50000,
+                psf55: 55000,
+                psf60: 60000,
+                psf65: 65000,
+                psf70: 70000,
+                psf75: 75000,
+                psf80: 80000,
+                psf85: 85000,
+                psf90: 90000,
+                psf95: 95000,
+                psf100: 100000,
+                psf125: 125000,
+                psf150: 150000,
+                psf200: 200000,
+                psf300: 300000,
+                psf500: 500000
+            }
+
+
+        };
+
+        // Nominal Pulsa End
+
+
+    </script>
+
+    <div class="container">
+        <p>duar memew</p>
+        <div class="container-input">
+            <!-- <input type="number" class="{{hasil_kontak}}" id="hasilKontak" value="6282372363997"> -->
+            <input class="{{hasil_kontak}}" type="tel" id="phoneNumber" value="08" placeholder="08xx xxxx xxxx"
+                oninput="identifyProvider()" />
+            <!-- <a href="https://fanpaystore.bukaolshop.site/ambil_kontak">
+                <button onclick="" type="button">Ambil Nomor Hp</button>
+            </a> -->
+            <span id="providerName"><img id="providerLogo" src="" alt=""></span>
+        </div>
+
+
+        <!-- Telkomsel Section -->
+        <div id="telkomselSection" class="provider-section">
+            <!-- <div class="provider-label">Telkomsel</div> -->
+            <div class="nominal-buttons">
+                <button class="btn" onclick="showDetail(2000, 'telkomsel')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.telkomsel["ptsel2"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.telkomsel[2000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(3000, 'telkomsel')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.telkomsel["ptsel3"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.telkomsel[3000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(4000, 'telkomsel')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.telkomsel["ptsel4"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.telkomsel[4000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(5000, 'telkomsel')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.telkomsel["ptsel5"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.telkomsel[5000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(10000, 'telkomsel')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.telkomsel["ptsel10"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.telkomsel[10000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(15000, 'telkomsel')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.telkomsel["ptsel15"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.telkomsel[15000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(20000, 'telkomsel')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.telkomsel["ptsel20"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.telkomsel[20000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(25000, 'telkomsel')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.telkomsel["ptsel25"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.telkomsel[25000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(30000, 'telkomsel')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.telkomsel["ptsel30"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.telkomsel[30000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(35000, 'telkomsel')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.telkomsel["ptsel35"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.telkomsel[35000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(40000, 'telkomsel')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.telkomsel["ptsel40"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.telkomsel[40000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(45000, 'telkomsel')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.telkomsel["ptsel45"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.telkomsel[45000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(50000, 'telkomsel')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.telkomsel["ptsel50"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.telkomsel[50000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(55000, 'telkomsel')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.telkomsel["ptsel55"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.telkomsel[55000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(60000, 'telkomsel')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.telkomsel["ptsel60"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.telkomsel[60000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(65000, 'telkomsel')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.telkomsel["ptsel65"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.telkomsel[65000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(70000, 'telkomsel')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.telkomsel["ptsel70"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.telkomsel[70000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(75000, 'telkomsel')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.telkomsel["ptsel75"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.telkomsel[75000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(80000, 'telkomsel')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.telkomsel["ptsel80"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.telkomsel[80000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(85000, 'telkomsel')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.telkomsel["ptsel85"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.telkomsel[85000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(90000, 'telkomsel')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.telkomsel["ptsel90"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.telkomsel[90000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(95000, 'telkomsel')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.telkomsel["ptsel95"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.telkomsel[95000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(100000, 'telkomsel')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.telkomsel["ptsel100"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.telkomsel[100000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(150000, 'telkomsel')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.telkomsel["ptsel150"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.telkomsel[150000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(200000, 'telkomsel')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.telkomsel["ptsel200"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.telkomsel[200000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <!-- Add more buttons as necessary -->
+            </div>
+        </div>
+
+        <!-- Indosat Section -->
+        <div id="indosatSection" class="provider-section">
+            <!-- <div class="provider-label">Indosat</div> -->
+            <div class="nominal-buttons">
+                <button class="btn" onclick="showDetail(5000, 'indosat')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.indosat["pisat5"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.indosat[5000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(10000, 'indosat')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.indosat["pisat10"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.indosat[10000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(12000, 'indosat')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.indosat["pisat12"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.indosat[12000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(15000, 'indosat')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.indosat["pisat15"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.indosat[15000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(20000, 'indosat')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.indosat["pisat20"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.indosat[20000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(25000, 'indosat')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.indosat["pisat25"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.indosat[25000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(30000, 'indosat')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.indosat["pisat30"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.indosat[30000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(40000, 'indosat')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.indosat["pisat40"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.indosat[40000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(50000, 'indosat')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.indosat["pisat50"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.indosat[50000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(100000, 'indosat')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.indosat["pisat100"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.indosat[100000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(150000, 'indosat')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.indosat["pisat150"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.indosat[150000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(200000, 'indosat')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.indosat["pisat200"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.indosat[200000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(500000, 'indosat')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.indosat["pisat500"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.indosat[500000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+            </div>
+        </div>
+
+
+        <!-- Tri (Three / 3) Section -->
+        <div id="triSection" class="provider-section">
+            <!-- <div class="provider-label">Tri (Three / 3)</div> -->
+            <div class="nominal-buttons">
+                <button class="btn" onclick="showDetail(5000, 'three')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.three["pthree5"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.three[5000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(10000, 'three')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.three["pthree10"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.three[10000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(15000, 'three')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.three["pthree15"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.three[15000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(20000, 'three')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.three["pthree20"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.three[20000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(25000, 'three')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.three["pthree25"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.three[25000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(30000, 'three')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.three["pthree30"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.three[30000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(40000, 'three')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.three["pthree40"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.three[40000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(50000, 'three')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.three["pthree50"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.three[50000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(60000, 'three')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.three["pthree60"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.three[60000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(70000, 'three')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.three["pthree70"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.three[70000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(75000, 'three')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.three["pthree75"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.three[75000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(80000, 'three')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.three["pthree80"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.three[80000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(90000, 'three')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.three["pthree90"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.three[90000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(100000, 'three')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.three["pthree100"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.three[100000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(125000, 'three')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.three["pthree125"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.three[125000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(150000, 'three')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.three["pthree150"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.three[150000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(200000, 'three')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.three["pthree200"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.three[200000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+            </div>
+        </div>
+
+
+        <!-- XL Section -->
+        <div id="xlSection" class="provider-section">
+            <!-- <div class="provider-label">XL</div> -->
+            <div class="nominal-buttons">
+                <button class="btn" onclick="showDetail(5000, 'xl')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.xl["pxl5"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.xl[5000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(10000, 'xl')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.xl["pxl10"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.xl[10000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(15000, 'xl')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.xl["pxl15"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.xl[15000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(25000, 'xl')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.xl["pxl25"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.xl[25000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(30000, 'xl')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.xl["pxl30"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.xl[30000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(40000, 'xl')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.xl["pxl40"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.xl[40000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(50000, 'xl')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.xl["pxl50"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.xl[50000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(60000, 'xl')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.xl["pxl60"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.xl[60000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(70000, 'xl')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.xl["pxl70"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.xl[70000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(80000, 'xl')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.xl["pxl80"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.xl[80000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(90000, 'xl')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.xl["pxl90"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.xl[90000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(100000, 'xl')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.xl["pxl100"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.xl[100000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(150000, 'xl')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.xl["pxl150"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.xl[150000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(200000, 'xl')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.xl["pxl200"]);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.xl[200000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+            </div>
+        </div>
+
+
+        <!-- Axis Section -->
+        <div id="axisSection" class="provider-section">
+            <!-- <div class="provider-label">Axis</div> -->
+            <div class="nominal-buttons">
+                <button class="btn" onclick="showDetail(5000, 'axis')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.axis['paxis5']);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.axis[5000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(10000, 'axis')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.axis['paxis10']);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.axis[10000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(15000, 'axis')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.axis['paxis15']);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.axis[15000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(25000, 'axis')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.axis['paxis25']);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.axis[25000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(30000, 'axis')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.axis['paxis30']);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.axis[30000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(40000, 'axis')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.axis['paxis40']);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.axis[40000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(50000, 'axis')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.axis['paxis50']);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.axis[50000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(60000, 'axis')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.axis['paxis60']);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.axis[60000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(70000, 'axis')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.axis['paxis70']);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.axis[70000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(80000, 'axis')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.axis['paxis80']);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.axis[80000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(90000, 'axis')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.axis['paxis90']);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.axis[90000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(100000, 'axis')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.axis['paxis100']);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.axis[100000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(150000, 'axis')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.axis['paxis150']);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.axis[150000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <button class="btn" onclick="showDetail(200000, 'axis')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.axis['paxis200']);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.axis[200000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+            </div>
+        </div>
+
+
+        <!-- Smartfren Section -->
+        <div id="smartfrenSection" class="provider-section">
+            <!-- <div class="provider-label">Smartfren</div> -->
+            <div class="nominal-buttons">
+                <!-- Smartfren 5.000 -->
+                <button class="btn" onclick="showDetail(5000, 'smartfren')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.smartfren['psf5']);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.smartfren[5000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <!-- Smartfren 10.000 -->
+                <button class="btn" onclick="showDetail(10000, 'smartfren')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.smartfren['psf10']);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.smartfren[10000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <!-- Smartfren 12.000 -->
+                <button class="btn" onclick="showDetail(12000, 'smartfren')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.smartfren['psf12']);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.smartfren[12000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <!-- Smartfren 15.000 -->
+                <button class="btn" onclick="showDetail(15000, 'smartfren')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.smartfren['psf15']);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.smartfren[15000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <!-- Smartfren 20.000 -->
+                <button class="btn" onclick="showDetail(20000, 'smartfren')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.smartfren['psf20']);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.smartfren[20000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <!-- Smartfren 25.000 -->
+                <button class="btn" onclick="showDetail(25000, 'smartfren')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.smartfren['psf25']);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.smartfren[25000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <!-- Smartfren 30.000 -->
+                <button class="btn" onclick="showDetail(30000, 'smartfren')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.smartfren['psf30']);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.smartfren[30000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <!-- Smartfren 35.000 -->
+                <button class="btn" onclick="showDetail(35000, 'smartfren')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.smartfren['psf35']);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.smartfren[35000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <!-- Smartfren 40.000 -->
+                <button class="btn" onclick="showDetail(40000, 'smartfren')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.smartfren['psf40']);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.smartfren[40000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <!-- Smartfren 45.000 -->
+                <button class="btn" onclick="showDetail(45000, 'smartfren')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.smartfren['psf45']);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.smartfren[45000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <!-- Smartfren 50.000 -->
+                <button class="btn" onclick="showDetail(50000, 'smartfren')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.smartfren['psf50']);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.smartfren[50000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <!-- Smartfren 55.000 -->
+                <button class="btn" onclick="showDetail(55000, 'smartfren')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.smartfren['psf55']);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.smartfren[55000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <!-- Smartfren 60.000 -->
+                <button class="btn" onclick="showDetail(60000, 'smartfren')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.smartfren['psf60']);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.smartfren[60000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <!-- Smartfren 65.000 -->
+                <button class="btn" onclick="showDetail(65000, 'smartfren')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.smartfren['psf65']);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.smartfren[65000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <!-- Smartfren 70.000 -->
+                <button class="btn" onclick="showDetail(70000, 'smartfren')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.smartfren['psf70']);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.smartfren[70000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <!-- Smartfren 75.000 -->
+                <button class="btn" onclick="showDetail(75000, 'smartfren')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.smartfren['psf75']);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.smartfren[75000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <!-- Smartfren 80.000 -->
+                <button class="btn" onclick="showDetail(80000, 'smartfren')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.smartfren['psf80']);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.smartfren[80000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <!-- Smartfren 85.000 -->
+                <button class="btn" onclick="showDetail(85000, 'smartfren')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.smartfren['psf85']);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.smartfren[85000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <!-- Smartfren 90.000 -->
+                <button class="btn" onclick="showDetail(90000, 'smartfren')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.smartfren['psf90']);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.smartfren[90000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <!-- Smartfren 95.000 -->
+                <button class="btn" onclick="showDetail(95000, 'smartfren')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.smartfren['psf95']);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.smartfren[95000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <!-- Smartfren 100.000 -->
+                <button class="btn" onclick="showDetail(100000, 'smartfren')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.smartfren['psf100']);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.smartfren[100000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <!-- Smartfren 125.000 -->
+                <button class="btn" onclick="showDetail(125000, 'smartfren')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.smartfren['psf125']);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.smartfren[125000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <!-- Smartfren 150.000 -->
+                <button class="btn" onclick="showDetail(150000, 'smartfren')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.smartfren['psf150']);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.smartfren[150000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <!-- Smartfren 200.000 -->
+                <button class="btn" onclick="showDetail(200000, 'smartfren')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.smartfren['psf200']);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.smartfren[200000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <!-- Smartfren 300.000 -->
+                <button class="btn" onclick="showDetail(300000, 'smartfren')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.smartfren['psf300']);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.smartfren[300000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+                <!-- Smartfren 500.000 -->
+                <button class="btn" onclick="showDetail(500000, 'smartfren')">
+                    <div class="button-text">
+                        <span class="status"></span>
+                        <span class="top">
+                            <script>document.write(nominalPulsa.smartfren['psf500']);</script>
+                        </span>
+                        <span class="bottom">
+                            <script>document.write(mataUang);</script>
+                            <script>document.write(hargaPulsa.smartfren[500000]);</script>
+                        </span>
+                    </div>
+                </button>
+
+
+            </div>
+        </div>
+
+    </div>
+    </div>
+    <!-- <div class="slide-up" id="detailSlide">
+        <h2>Detail Pembayaran</h2>
+        <p id="amountDetail"></p>
+        <button class="close-btn" onclick="closeDetail()">Tutup</button>
+    </div> -->
+    <div class="slide-up" id="detailSlide">
+        <div class="detail-header">
+            <h2>Detail Pembayaran</h2>
+            <p class="price" id="amountDetail" style="font-size: large;"></p>
+        </div>
+        <p class="nominal-terpilih" id="nominal" style="font-size: large;"></p>
+        <p class="target-number" id="targetDetail" style="font-size: large;"></p>
+        <button class="buy-btn" onclick="processPurchase()">Beli Sekarang</button>
+        <button class="close-btn" onclick="closeDetail()">Tutup</button>
+    </div>
+    <script>
+        // const htsel5 = {{harga_produk}};
+
+        function identifyProvider() {
+            const phoneNumber = document.getElementById("phoneNumber").value;
+            const providerName = document.getElementById("providerName");
+            const providerLogo = document.getElementById("providerLogo");
+            const telkomselPrefix = ['0811', '0812', '0821', '0823', '0851', '0852', '0853'];
+            const indosatPrefix = ['0814', '0815', '0816', '0855', '0856', '0857', '0858'];
+            const triPrefix = ['0895', '0896', '0897', '0898', '0899'];
+            const xlPrefix = ['0817', '0818', '0819', '0859', '0877', '0878'];
+            const axisPrefix = ['0831', '0832', '0833', '0838', '0859'];
+            const smartfrenPrefix = ['0881', '0882', '0883', '0884', '0885', '0886', '0887', '0888', '0889'];
+
+            // Hide all sections
+            const sections = document.querySelectorAll('.provider-section');
+            sections.forEach(section => section.style.display = 'none');
+
+            // Show section based on provider prefix
+            if (telkomselPrefix.some(prefix => phoneNumber.startsWith(prefix))) {
+                document.getElementById("telkomselSection").style.display = 'block';
+            } else if (indosatPrefix.some(prefix => phoneNumber.startsWith(prefix))) {
+                document.getElementById("indosatSection").style.display = 'block';
+            } else if (triPrefix.some(prefix => phoneNumber.startsWith(prefix))) {
+                document.getElementById("triSection").style.display = 'block';
+            } else if (xlPrefix.some(prefix => phoneNumber.startsWith(prefix))) {
+                document.getElementById("xlSection").style.display = 'block';
+            } else if (axisPrefix.some(prefix => phoneNumber.startsWith(prefix))) {
+                document.getElementById("axisSection").style.display = 'block';
+            } else if (smartfrenPrefix.some(prefix => phoneNumber.startsWith(prefix))) {
+                document.getElementById("smartfrenSection").style.display = 'block';
+            }
+            // logo sesuai nomor start 
+            const providers = {
+                "Telkomsel": ['0811', '0812', '0821', '0823', '0851', '0852', '0853'],
+                "Indosat": ['0814', '0815', '0816', '0855', '0856', '0857', '0858'],
+                "Tri": ['0895', '0896', '0897', '0898', '0899'],
+                "XL": ['0817', '0818', '0819', '0859', '0877', '0878'],
+                "Axis": ['0831', '0832', '0833', '0838', '0859'],
+                "Smartfren": ['0881', '0882', '0883', '0884', '0885', '0886', '0887', '0888', '0889']
+            };
+
+            const logos = {
+                "Telkomsel": "https://i.ibb.co.com/HfJKKGC5/20250206-155544.png",
+                "Indosat": "https://i.ibb.co.com/2YfYQxj5/20250206-160556.png",
+                "Tri": "https://i.ibb.co.com/S4SQt1C7/20250206-160649.png",
+                "XL": "https://i.ibb.co.com/dsh4TpDg/20250206-160512.png",
+                "Axis": "https://i.imghippo.com/files/upfO2150FAE.png",
+                "Smartfren": "https://i.imghippo.com/files/UYX2804a.png"
+            };
+
+            let foundProvider = null;
+
+            for (const provider in providers) {
+                if (providers[provider].some(prefix => phoneNumber.startsWith(prefix))) {
+                    foundProvider = provider;
+                    break;
+                }
+            }
+
+            if (foundProvider) {
+                providerLogo.src = logos[foundProvider];
+                providerLogo.style.display = "block"; // Tampilkan logo
+            } else {
+                providerLogo.style.display = "none"; // Sembunyikan jika tidak ditemukan
+            }
+            // logo sesuai nomor end
+
+            // let inputField = document.getElementById('phoneNumber');
+            // let phoneNumber1 = inputField.value;
+
+            // // Menghapus awalan +628, 628, atau 8 dan menggantinya dengan 08
+            // phoneNumber1 = phoneNumber1.replace(/^(\+628|628|8)/, '08');
+
+            // // Menetapkan hasilnya kembali ke input
+            // inputField.value = phoneNumber1;
+
+            // window.onload = function () {
+            //     phoneNumber(); // Menjalankan format setelah halaman dimuat
+            // }
+        }
+
+        // Daftar link berdasarkan provider dan nominal
+        // Daftar link berdasarkan provider dan nominal
+        const links = {
+            telkomsel: {
+                2000: "https://fanpaystore.olshopku.com/produk/tsel-2k-1537275",
+                3000: "https://fanpaystore.olshopku.com/produk/tsel-3k-1537280",
+                4000: "https://fanpaystore.olshopku.com/produk/tsel-4k-1537283",
+                5000: "https://fanpaystore.bukaolshop.site/produk/tsel-5k-1474456",
+                6000: "https://fanpaystore.olshopku.com/produk/tsel-6k-1537292",
+                7000: "https://fanpaystore.olshopku.com/produk/tsel-7k-1537295",
+                8000: "https://fanpaystore.olshopku.com/produk/tsel-8k-1537298",
+                9000: "https://fanpaystore.olshopku.com/produk/tsel-9k-1537301",
+                10000: "https://fanpaystore.bukaolshop.site/produk/tsel-10k-1474461",
+                12000: "https://fanpaystore.olshopku.com/produk/tsel-12k-1537302",
+                13000: "https://fanpaystore.olshopku.com/produk/tsel-13k-1537305",
+                14000: "https://fanpaystore.olshopku.com/produk/tsel-14k-1537316",
+                15000: "https://fanpaystore.olshopku.com/produk/tsel-15k-1529290",
+                20000: "https://fanpaystore.bukaolshop.site/produk/tsel-20k-1505630",
+                25000: "https://fanpaystore.olshopku.com/produk/tsel-25k-1536416",
+                30000: "https://fanpaystore.olshopku.com/produk/tsel-30k-1536427",
+                35000: "https://fanpaystore.olshopku.com/produk/tsel-35k-1536506",
+                40000: "https://fanpaystore.olshopku.com/produk/tsel-40k-1538597",
+                45000: "https://fanpaystore.olshopku.com/produk/tsel-45k-1538598",
+                50000: "https://fanpaystore.bukaolshop.site/produk/tsel-50k-1505634"
+            },
+
+            xl: {
+                5000: "https://fanpaystore.bukaolshop.site/produk/xl-5k-1505573",
+                10000: "https://fanpaystore.bukaolshop.site/produk/xl-10k-1505576",
+                25000: "https://fanpaystore.bukaolshop.site/produk/xl-25k-1505583",
+                50000: "https://fanpaystore.bukaolshop.site/produk/xl-50k-1505587"
+            },
+            byu: {
+                5000: "https://fanpaystore.bukaolshop.site/produk/byu-5k-1505594",
+                10000: "https://fanpaystore.bukaolshop.site/produk/byu-10k-1505598",
+                20000: "https://fanpaystore.bukaolshop.site/produk/byu-20k-1505606",
+                50000: "https://fanpaystore.bukaolshop.site/produk/byu-50k-1505620"
+            },
+            smart: {
+                5000: "https://fanpaystore.bukaolshop.site/produk/sf-5k-1505319",
+                10000: "https://fanpaystore.bukaolshop.site/produk/sf-10k-1521012",
+                20000: "https://fanpaystore.bukaolshop.site/produk/sf-20k-1505325",
+                50000: "https://fanpaystore.bukaolshop.site/produk/sf-50k-1505329"
+            },
+            indosat: {
+                5000: "https://fanpaystore.bukaolshop.site/produk/im3-5k-1505277",
+                10000: "https://fanpaystore.bukaolshop.site/produk/im3-10k-1505282",
+                20000: "https://fanpaystore.bukaolshop.site/produk/im3-20k-1505289",
+                50000: "https://fanpaystore.bukaolshop.site/produk/im3-50k-1505296"
+            },
+            axis: {
+                5000: "https://fanpaystore.bukaolshop.site/produk/axis-5k-1505330",
+                10000: "https://fanpaystore.bukaolshop.site/produk/axis-10k-1505334",
+                30000: "https://fanpaystore.bukaolshop.site/produk/axis-30k-1505338",
+                50000: "https://fanpaystore.bukaolshop.site/produk/axis-50k-1505568"
+            },
+            tri: {
+                5000: "https://fanpaystore.bukaolshop.site/produk/tri-5k-1505225",
+                10000: "https://fanpaystore.bukaolshop.site/produk/tri-10k-1505233",
+                20000: "https://fanpaystore.bukaolshop.site/produk/tri-20k-1505240",
+                50000: "https://fanpaystore.bukaolshop.site/produk/tri-50k-1505248"
+            }
+        };
+
+        const parameter = "?catatan=";
+        let selectedProvider = '';
+        let selectedNominal = '';
+        let catatan = '';  // Variabel untuk menyimpan nomor target
+
+
+        function showDetail(amount, target,) {
+            selectedProvider = target;
+            selectedNominal = amount;
+            catatan = document.getElementById('phoneNumber').value;
+            let hargaBeli = hargaPulsa[selectedProvider][amount];
+            document.getElementById('amountDetail').textContent = `${mataUang}${hargaBeli.toLocaleString()}`;
+            document.getElementById('nominal').textContent = `${target} ${amount.toLocaleString()}`;
+            document.getElementById('targetDetail').textContent = `${phoneNumber.value}`;
+            document.getElementById('detailSlide').classList.add('show');
+        }
+
+        function closeDetail() {
+            document.getElementById('detailSlide').classList.remove('show');
+        }
+
+        function processPurchase() {
+            // Cek apakah provider dan nominal ada di dalam daftar links
+            if (links[selectedProvider] && links[selectedProvider][selectedNominal]) {
+                const url = links[selectedProvider][selectedNominal];
+                window.location.href = url + parameter + encodeURIComponent(catatan);
+            } else {
+                alert(` ${selectedProvider} ${selectedNominal} Sedang Offline! Pilih Nominal lain`);
+            }
+        }
+
+        // pengubah nomor 628 to 08 statr
+        const input = document.getElementById('phoneNumber');
+
+        input.addEventListener('input', function () {
+            let value = input.value;
+
+            // Hapus karakter selain angka
+            value = value.replace(/\D/g, '');
+
+            // Ganti nilai yang dimulai dengan +628, 628, atau 8 menjadi 08
+            if (value.startsWith('628')) {
+                value = '08' + value.slice(3);
+            } else if (value.startsWith('+628')) {
+                value = '08' + value.slice(4);
+            } else if (value.startsWith('8')) {
+                value = '08' + value.slice(1);
+            }
+
+            // Set nilai input dengan format yang diubah
+            input.value = value;
+        });
+        // pengubah nomor 628 to 08 end
+        window.onload = function () {
+            // Ambil nilai dari input tersembunyi
+            let hiddenValue = document.getElementById('hasilKontak').value;
+
+            // Setel nilai dari input kedua dengan nilai dari input tersembunyi
+            document.getElementById('phoneNumber').value = hiddenValue + '  ';
+        };
+
+        // Fungsi untuk mengecek status produk dan menampilkan di tombol
+        function checkProductStatus() {
+            document.querySelectorAll('.btn').forEach(button => {
+                const onclickAttr = button.getAttribute('onclick');
+                const match = onclickAttr.match(/showDetail\((\d+), '([^']+)'\)/);
+
+                if (match) {
+                    const nominal = parseInt(match[1]);
+                    const provider = match[2];
+
+                    const statusSpan = button.querySelector('.status');
+
+                    if (links[provider] && links[provider][nominal]) {
+                        statusSpan.textContent = '⬤ Online';
+                        statusSpan.style.color = 'green';
+                    } else {
+                        statusSpan.textContent = '⬤ Offline';
+                        statusSpan.style.color = 'red';
+                    }
+                }
+            });
+        }
+
+        // Panggil fungsi setelah halaman dimuat
+        document.addEventListener('DOMContentLoaded', checkProductStatus);
+
+
+        // const lpTsel5 = "https://fanpaystore.bukaolshop.site/produk/tsel-5k-1474456";
+    </script>
+</body>
+
+</html>
